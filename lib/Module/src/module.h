@@ -1,5 +1,3 @@
-#ifdef EMBEDDED
-
 #ifndef MODULE_H
 #define MODULE_H
 
@@ -14,7 +12,8 @@ public:
     virtual void loop() = 0;
     virtual void exec_action() = 0;
     virtual String name() = 0;
+    virtual float read_value() = 0;
+    virtual bool action_executed() = 0;
 };
 
-#endif
 #endif

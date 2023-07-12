@@ -26,11 +26,6 @@
     #define HX711_SCK_FOOD 14 //mcu > HX711 sck pin
 #endif
 
-#ifdef BALANCA_ENABLED
-    #define HX711_DOUT_WATER 13//mcu > HX711 dout pin, must be external interrupt capable!
-    #define HX711_SCK_WATER 12 //mcu > HX711 sck pin
-#endif
-
 #ifdef WATER_ENABLED
     #define TRANSISTOR_PIN 4
 #endif

@@ -16,13 +16,15 @@ public:
     void exec_action();
     String name();
     void set_weight_for_water(int new_weight);
-    void calibrate();
+    void open_water();
+    void close_water();
+    float read_value();
+    bool action_executed();
 
 private:
-    Balanca* _balanca;
-
     double _weight_for_water; //gramas
     int _state;
+    bool _executed;
 
     bool _want_to_water_now;
 

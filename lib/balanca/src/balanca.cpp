@@ -18,7 +18,7 @@ void Balanca::calibration()
 {    
     // Faz a leitura e calcula a escala
     long leitura = _balanca->read_average(50);
-    float escala = (leitura - _balanca->get_offset())/1.00f;
+    float escala = (leitura - _balanca->get_offset())/1000.00f;
     
     // Usa a escala calculada
     _balanca->set_scale(escala);
@@ -28,7 +28,7 @@ void Balanca::calibration()
 
 float Balanca::get_weight()
 {
-    return _balanca->get_units(5);
+    return _balanca->get_units(2);
 }
 
 void Balanca::tare()
