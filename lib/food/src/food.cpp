@@ -12,7 +12,7 @@ Food::~Food()
     _servo = nullptr;
 }
 
-void Food::setup()
+void Food::initialization()
 {
     Serial.println("[Food::setup] - Info - food setup");
     _state = FOOD_CLOSE;
@@ -34,7 +34,7 @@ void Food::setup()
     Serial.println("[Food::setup] - Info - food setup finished");
 }
 
-void Food::start()
+void Food::startup()
 {
     Serial.println("[Food::start] - Info - food start");
     _servo->attach(SERVO_PIN);
@@ -54,10 +54,13 @@ void Food::loop()
         } else {
             _servo->write(_graus_for_close);
         }
+
+        Serial.print("peso: ");
+        Serial.println(peso);
         
         _turn_to_open = !_turn_to_open;
 
-        if(peso >= _weight_for_food * 0.8) {
+        if(peso >= _weight_for_food * 0.7) {
             _state = FOOD_CLOSE;
             _executed = true;
         }
@@ -115,6 +118,7 @@ void Food::close_door()
 void Food::tare()
 {
     _balanca->tare();
+    Serial.println("Food::tare");
 }
 
 float Food::read_value()

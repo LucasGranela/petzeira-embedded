@@ -8,10 +8,10 @@
 class Water : public Module
 {
 public:
-    Water(/* args */);
+    Water();
     ~Water();
-    void setup();
-    void start();
+    void initialization();
+    void startup();
     void loop();
     void exec_action();
     String name();
@@ -20,6 +20,8 @@ public:
     void close_water();
     float read_value();
     bool action_executed();
+    
+
 
 private:
     double _weight_for_water; //gramas

@@ -11,8 +11,8 @@ class Wifi_Module : public Module
 public:
     Wifi_Module(Application* app);
     ~Wifi_Module();
-    void setup();
-    void start();
+    void initialization();
+    void startup();
     void loop();
     void exec_action();
     String name();

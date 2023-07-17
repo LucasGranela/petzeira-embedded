@@ -125,12 +125,12 @@ void printWifiStatus() {
 
 void connect_wifi_network() 
 {
-  //server.close();
-  //WiFi.disconnect();
+  server.close();
+  WiFi.disconnect();
   WiFi.mode(WIFI_STA);
 
   Serial.print("Connecting to ");
-  //Serial.println(local_ssid.c_str());
+  Serial.println(local_ssid.c_str());
 
   //WiFi.begin(local_ssid.c_str(), local_pass.c_str());
 
@@ -464,40 +464,64 @@ Wifi_Module::~Wifi_Module()
     delete _mac_address;
 }
 
-void Wifi_MQTT_Task(void *pvParameters) 
+void Wifi_Module::initialization()
 {
-    connect_wifi_network();
+    Serial.println("[Wifi_Module::setup] - INFO - wifi setup");
 
-    // WiFi.softAP(AP_SSID, AP_PASS);
-    // delay(100);
-    // WiFi.softAPConfig(local_IP, gateway, subnet);
-    // delay(100);
-    // Serial.print("IP address: "); Serial.println(WiFi.softAPIP());
+    if(esp_efuse_mac_get_default(mac_address) != ESP_OK) {
+      mac_address = nullptr;
+      mac_address_string= "0000001321";
+    } else {
+      for(int i=0; i < 6; i++) {
+        mac_address_string += (int)mac_address[i];
+      }
+    }
 
-    // server.on("/", send_web_page_for_get_wifi_connections);
-    // server.on("/xml", SendXML);
-    // server.on("/SEND_WIFI_NAME_PASSWORD", update_wifi_name_and_password);
+    mqtt_client_topic = "client/" + mac_address_string;
+    mqtt_server_topic = "server/" + mac_address_string;
 
-    // finally begin the server
-    // server.begin();
+   
+}
 
-    // while (true) {
-    //     if (WiFi.softAPgetStationNum() > 0) {
-    //     // Client connected
-    //     Serial.println("Configuration started.");
-    //         break;
-    //     }
+void Wifi_Module::startup()
+{
+  Serial.println("Wifi_Module::start");
+}
 
-    //     delay(1000);
-    // }
+void Wifi_Module::loop()
+{
+  //connect_wifi_network();
+
+    WiFi.softAP(AP_SSID, AP_PASS);
+    delay(100);
+    WiFi.softAPConfig(local_IP, gateway, subnet);
+    delay(100);
+    Serial.print("IP address: "); Serial.println(WiFi.softAPIP());
+
+    server.on("/", send_web_page_for_get_wifi_connections);
+    server.on("/xml", SendXML);
+    server.on("/SEND_WIFI_NAME_PASSWORD", update_wifi_name_and_password);
+
+    //finally begin the server
+    server.begin();
+
+    while (true) {
+        if (WiFi.softAPgetStationNum() > 0) {
+        // Client connected
+        Serial.println("Configuration started.");
+            break;
+        }
+
+        delay(1000);
+    }
 
     while (true)
     { 
         server.handleClient();
 
-        // if(change_type_wifi) {
-        //   connect_wifi_network();
-        // }
+        if(change_type_wifi) {
+          connect_wifi_network();
+        }
 
         if(change_type_login) {
           connect_to_server();
@@ -541,38 +565,6 @@ void Wifi_MQTT_Task(void *pvParameters)
         mqtt_client.publish(mqtt_client_topic.c_str(), return_message.c_str());
       }
     }
-
-    vTaskDelete(nullptr);
-}
-
-void Wifi_Module::setup()
-{
-    Serial.println("[Wifi_Module::setup] - INFO - wifi setup");
-
-    if(esp_efuse_mac_get_default(mac_address) != ESP_OK) {
-      mac_address = nullptr;
-      mac_address_string= "0000001321";
-    } else {
-      for(int i=0; i < 6; i++) {
-        mac_address_string += (int)mac_address[i];
-      }
-    }
-
-    mqtt_client_topic = "client/" + mac_address_string;
-    mqtt_server_topic = "server/" + mac_address_string;
-
-   
-}
-
-void Wifi_Module::start()
-{
-  Serial.println("Wifi_Module::start");
-  xTaskCreate(Wifi_MQTT_Task, "WifiMQTT_Task", 40 * 1024, this, 3, nullptr);
-}
-
-void Wifi_Module::loop()
-{
-  
 }
 
 void Wifi_Module::exec_action()

@@ -1,7 +1,7 @@
 #include "water.h"
 #include "staticconfig.h"
 
-Water::Water(/* args */)
+Water::Water()
 {
 
 }
@@ -11,7 +11,7 @@ Water::~Water()
 
 }
 
-void Water::setup()
+void Water::initialization()
 {
     Serial.println("[Water::setup] - Info - Water setup");
     _state = WATER_CLOSED;
@@ -19,42 +19,42 @@ void Water::setup()
     _want_to_water_now = false;
     _executed = false;
 
-    //pinMode(TRANSISTOR_PIN, OUTPUT);
+    pinMode(TRANSISTOR_PIN, OUTPUT);
     Serial.println("[Water::setup] - Info - Water setup fineshed");
 }
 
-void Water::start()
+void Water::startup()
 {
     Serial.println("[Water::start] - Info - Water start");
-    //digitalWrite(TRANSISTOR_PIN, LOW);
+    digitalWrite(TRANSISTOR_PIN, LOW);
     Serial.println("[Water::start] - Info - Water start fineshed");
 }
 
 void Water::loop()
 {
-    // switch (_state)
-    // {
-    // case WATER_OPEN: {
-    //     digitalWrite(TRANSISTOR_PIN, HIGH);
-    //     vTaskDelay(7000 / portTICK_PERIOD_MS);
-    //     digitalWrite(TRANSISTOR_PIN, LOW);
-    //     _state = WATER_CLOSED;
-    //     _executed = true;
-    // } break;
+    switch (_state)
+    {
+    case WATER_OPEN: {
+        digitalWrite(TRANSISTOR_PIN, HIGH);
+        vTaskDelay(10000 / portTICK_PERIOD_MS);
+        digitalWrite(TRANSISTOR_PIN, LOW);
+        _state = WATER_CLOSED;
+        _executed = true;
+    } break;
 
-    // case WATER_CLOSED: {
-    //     digitalWrite(TRANSISTOR_PIN, LOW);
+    case WATER_CLOSED: {
+        digitalWrite(TRANSISTOR_PIN, LOW);
 
-    //     if(_want_to_water_now) {
-    //         _state = WATER_OPEN;
-    //         _want_to_water_now = false;
-    //         _executed = false;
-    //     }
-    // } break;
+        if(_want_to_water_now) {
+            _state = WATER_OPEN;
+            _want_to_water_now = false;
+            _executed = false;
+        }
+    } break;
     
-    // default:
-    //     break;
-    // }    
+    default:
+        break;
+    }    
 }
 
 void Water::exec_action()

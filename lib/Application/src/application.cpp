@@ -36,7 +36,6 @@ void Application::loop() {
             food->calibrate();
             _calibrate_module = false;
         }
-        module->loop();
     }
 
     vTaskDelay(50 / portTICK_PERIOD_MS);

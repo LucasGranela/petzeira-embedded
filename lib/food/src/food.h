@@ -11,8 +11,8 @@ class Food : public Module
 public:
     Food(/* args */);
     ~Food();
-    void setup();
-    void start();
+    void initialization();
+    void startup();
     void loop();
     void exec_action();
     String name();
@@ -23,6 +23,7 @@ public:
     void tare();
     float read_value();
     bool action_executed();
+    
 
 private:
     Servo* _servo;

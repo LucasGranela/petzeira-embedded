@@ -28,7 +28,7 @@ void Balanca::calibration()
 
 float Balanca::get_weight()
 {
-    return _balanca->get_units(2);
+    return _balanca->get_units(5);
 }
 
 void Balanca::tare()

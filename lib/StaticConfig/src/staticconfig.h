@@ -27,7 +27,7 @@
 #endif
 
 #ifdef WATER_ENABLED
-    #define TRANSISTOR_PIN 4
+    #define TRANSISTOR_PIN 12
 #endif
 
 #endif

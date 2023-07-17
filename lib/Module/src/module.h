@@ -7,8 +7,12 @@ class Module
 { 
 
 public:
-    virtual void setup() = 0;
-    virtual void start() = 0;
+    void setup();
+    void start();
+    
+public:
+    virtual void initialization() = 0;
+    virtual void startup() = 0;
     virtual void loop() = 0;
     virtual void exec_action() = 0;
     virtual String name() = 0;
